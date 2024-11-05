@@ -41,10 +41,19 @@ public class Server {
                             out.flush();
                             continue;
                         }
+
                         String operator = line.split(" ")[0];
-                        double var1 = Double.parseDouble(line.split(" ")[1]);
-                        double var2 = Double.parseDouble(line.split(" ")[2]);
-                        
+                        double var1, var2;
+
+                        try {
+                            var1 = Double.parseDouble(line.split(" ")[1]);
+                            var2 = Double.parseDouble(line.split(" ")[2]);
+                        } catch (NumberFormatException e) {
+                            out.write("> ERROR NON-NUMERIC ARGUMENTS\n");
+                            out.flush();
+                            continue;
+                        }
+                            
                         switch (operator) {
                             case "ADD":
                                 out.write(formatResult(var1 + var2));
@@ -60,6 +69,7 @@ public class Server {
                                     out.write("> ERROR DIVISION BY ZERO\n");
                                     break;
                                 }
+                                
                                 out.write(formatResult(var1 / var2));
                                 break;
                             default:
