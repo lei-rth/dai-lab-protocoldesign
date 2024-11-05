@@ -23,7 +23,7 @@ public class Server {
 
     private String formatResult(double result) {
         BigDecimal decimal = BigDecimal.valueOf(result).stripTrailingZeros();
-        return decimal.toPlainString();
+        return "> RESULT " + decimal.toPlainString() + "\n";
     }
 
     private void run() {
@@ -36,26 +36,31 @@ public class Server {
 
                     String line;
                     while ((line = in.readLine()) != null) {
+                        if (line.split(" ").length != 3) {
+                            out.write("> ERROR PROVIDE AN OPERATION IN THE FOLLOWING FORMAT: <OPERATION> <Number1> <Number2>\n");
+                            out.flush();
+                            continue;
+                        }
                         String operator = line.split(" ")[0];
                         double var1 = Double.parseDouble(line.split(" ")[1]);
                         double var2 = Double.parseDouble(line.split(" ")[2]);
                         
                         switch (operator) {
                             case "ADD":
-                                out.write("> RESULT " + formatResult(var1 + var2) + "\n");
+                                out.write(formatResult(var1 + var2));
                                 break;
                             case "SUB":
-                                out.write("> RESULT " + formatResult(var1 - var2) + "\n");
+                                out.write(formatResult(var1 - var2));
                                 break;
                             case "MUL":
-                                out.write("> RESULT " + formatResult(var1 * var2) + "\n");
+                                out.write(formatResult(var1 * var2));
                                 break;
                             case "DIV":
                                 if (var2 == 0) {
                                     out.write("> ERROR DIVISION BY ZERO\n");
                                     break;
                                 }
-                                out.write("> RESULT " + formatResult(var1 / var2) + "\n");
+                                out.write(formatResult(var1 / var2));
                                 break;
                             default:
                                 out.write("> ERROR INVALID OPERATION\n");
