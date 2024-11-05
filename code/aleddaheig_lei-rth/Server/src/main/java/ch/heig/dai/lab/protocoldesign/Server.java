@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.regex.Pattern;
@@ -20,6 +21,11 @@ public class Server {
         server.run();
     }
 
+    private String formatResult(double result) {
+        BigDecimal decimal = BigDecimal.valueOf(result).stripTrailingZeros();
+        return decimal.toPlainString();
+    }
+
     private void run() {
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT)) {
             while (true) {
@@ -30,7 +36,32 @@ public class Server {
 
                     String line;
                     while ((line = in.readLine()) != null) {
-                        out.write(line + "\n");
+                        String operator = line.split(" ")[0];
+                        double var1 = Double.parseDouble(line.split(" ")[1]);
+                        double var2 = Double.parseDouble(line.split(" ")[2]);
+                        
+                        switch (operator) {
+                            case "ADD":
+                                out.write("> RESULT " + formatResult(var1 + var2) + "\n");
+                                break;
+                            case "SUB":
+                                out.write("> RESULT " + formatResult(var1 - var2) + "\n");
+                                break;
+                            case "MUL":
+                                out.write("> RESULT " + formatResult(var1 * var2) + "\n");
+                                break;
+                            case "DIV":
+                                if (var2 == 0) {
+                                    out.write("> ERROR DIVISION BY ZERO\n");
+                                    break;
+                                }
+                                out.write("> RESULT " + formatResult(var1 / var2) + "\n");
+                                break;
+                            default:
+                                out.write("> ERROR INVALID OPERATION\n");
+                                break;
+                        }
+
                         out.flush();
                     }
 

@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
 public class Client {
-    final String SERVER_ADDRESS = "172.20.10.14";
+    final String SERVER_ADDRESS = "localhost";
     final int SERVER_PORT = 5656;
 
     public static void main(String[] args) {
@@ -28,11 +28,25 @@ public class Client {
                 var out = new BufferedWriter(
                         new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))) {
 
-            for (int i = 0; i < 10; i++) {
-                out.write("Hello " + i + "\n");
+            System.out.println("Connected to server");
+
+            var userInputReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+            while (true) {
+                System.out.print("> ");
+                String userInput = userInputReader.readLine();
+
+                if (userInput.equals("QUIT")) {
+                    System.out.print("> BYE");
+                    break;
+                }
+                
+                out.write(userInput + "\n");
                 out.flush();
-                System.out.println("Echo: " + in.readLine());
+                
+                String response = in.readLine();
+                System.out.println(response);
             }
+            
         } catch (IOException e) {
             System.out.println("Client: exception while using client socket: " + e);
         }
