@@ -29,20 +29,26 @@ public class Client {
                         new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))) {
 
             System.out.println("Connected to server");
+            System.out.println(">> WELCOME TO THE CALCULATOR PROTOCOL <<");
+            System.out.println("==============================================");
+            System.out.println("Usage      :  <OPERATION> <Number1> <Number2>");
+            System.out.println("Operations :  ADD, SUB, MUL, DIV");
+            System.out.println("QUIT       :  Close the connection");
 
             var userInputReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
             while (true) {
                 System.out.print("> ");
                 String userInput = userInputReader.readLine();
-
+                
                 if (userInput.equals("QUIT")) {
-                    System.out.print("> BYE");
+                    System.out.println(">> BYE <<");
+                    out.flush();
                     break;
                 }
-                
+
                 out.write(userInput + "\n");
                 out.flush();
-                
+
                 String response = in.readLine();
                 System.out.println(response);
             }

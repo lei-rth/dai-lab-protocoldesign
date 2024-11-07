@@ -69,7 +69,7 @@ public class Server {
                                     out.write("> ERROR DIVISION BY ZERO\n");
                                     break;
                                 }
-                                
+
                                 out.write(formatResult(var1 / var2));
                                 break;
                             default:
