@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
@@ -39,20 +40,18 @@ public class Client {
             while (true) {
                 System.out.print("> ");
                 String userInput = userInputReader.readLine();
-                
-                if (userInput.equals("QUIT")) {
-                    System.out.println(">> BYE <<");
-                    out.flush();
-                    break;
-                }
 
                 out.write(userInput + "\n");
                 out.flush();
 
                 String response = in.readLine();
-                System.out.println(response);
+                System.out.println("> " + response);
+
+                if (response.contains("BYE")) {
+                    return;
+                }
             }
-            
+
         } catch (IOException e) {
             System.out.println("Client: exception while using client socket: " + e);
         }
