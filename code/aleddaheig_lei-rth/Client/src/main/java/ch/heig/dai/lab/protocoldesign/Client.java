@@ -3,19 +3,14 @@ package ch.heig.dai.lab.protocoldesign;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
 public class Client {
-    final String SERVER_ADDRESS = "localhost";
-    final int SERVER_PORT = 5656;
+    private final String SERVER_ADDRESS = "localhost";
+    private final int SERVER_PORT = 5656;
 
     public static void main(String[] args) {
         // Create a new client and run it
@@ -29,17 +24,25 @@ public class Client {
                 var out = new BufferedWriter(
                         new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))) {
 
-            System.out.println("Connected to server");
-            System.out.println(">> WELCOME TO THE CALCULATOR PROTOCOL <<");
-            System.out.println("==============================================");
-            System.out.println("Usage      :  <OPERATION> <Number1> <Number2>");
-            System.out.println("Operations :  ADD, SUB, MUL, DIV");
-            System.out.println("QUIT       :  Close the connection");
+            String initialMessage = "";
+            String line;
+            while ((line = in.readLine()) != null) {
+                if (line.contains("EOF")) {
+                    break;
+                }
+                initialMessage += line + "\n";
+            }
+            System.out.println(initialMessage);
 
             var userInputReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
             while (true) {
                 System.out.print("> ");
                 String userInput = userInputReader.readLine();
+
+                if (userInput.equals("HELP")) {
+                    System.out.println(initialMessage);
+                    continue;
+                }
 
                 out.write(userInput + "\n");
                 out.flush();
@@ -48,7 +51,7 @@ public class Client {
                 System.out.println("> " + response);
 
                 if (response.contains("BYE")) {
-                    return;
+                    break;
                 }
             }
 

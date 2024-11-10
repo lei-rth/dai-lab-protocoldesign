@@ -3,18 +3,16 @@ package ch.heig.dai.lab.protocoldesign;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.SocketException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.*;
 
 public class Server {
-    final int SERVER_PORT = 5656;
+    private final int SERVER_PORT = 5656;
 
     public static void main(String[] args) {
         // Create a new server and run it
@@ -37,13 +35,21 @@ public class Server {
 
                     System.out.println("Client connected");
 
+                    out.write(">> WELCOME TO THE CALCULATOR PROTOCOL <<\n" +
+                            "==============================================\n" +
+                            "Usage      :  <OPERATION> <Number1> <Number2>\n" +
+                            "Operations :  ADD, SUB, MUL, DIV\n" +
+                            "QUIT       :  Close the connection\n" +
+                            "HELP       :  Show this message\n" +
+                            "EOF\n");
+                    out.flush();
+
                     String line;
                     while ((line = in.readLine()) != null) {
                         if (line.equals("QUIT")) {
-                            System.out.println("Server: bye");
                             out.write("BYE\n");
                             out.flush();
-                            throw new SocketException("Connection closed");
+                            break;
                         } else if (line.split(" ").length != 3) {
                             out.write(
                                     "ERROR PROVIDE AN OPERATION IN THE FOLLOWING FORMAT: <OPERATION> <Number1> <Number2>\n");
@@ -89,11 +95,11 @@ public class Server {
                         out.flush();
                     }
 
-                } catch (SocketException e) {
-                    System.out.println("Server: " + e);
                 } catch (IOException e) {
                     System.out.println("Server: socket ex.: " + e);
                 }
+
+                System.out.println("Server: connection to client closed");
             }
         } catch (IOException e) {
             System.out.println("Server: server socket ex.: " + e);
