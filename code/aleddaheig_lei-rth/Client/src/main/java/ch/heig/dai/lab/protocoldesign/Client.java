@@ -24,16 +24,13 @@ public class Client {
                 var out = new BufferedWriter(
                         new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))) {
 
-            String initialMessage = "";
+            StringBuilder initialMessage = new StringBuilder();
             String line;
             System.out.println(in.readLine());
-            while ((line = in.readLine()) != null) {
-                if (line.contains("EOF")) {
-                    break;
-                }
-                initialMessage += line + "\n";
+            while ((line = in.readLine()) != null && line.length() != 0) {
+                initialMessage.append(line + "\n");
             }
-            System.out.println(initialMessage);
+            System.out.println(initialMessage.toString());
 
             var userInputReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
             while (true) {
@@ -41,7 +38,7 @@ public class Client {
                 String userInput = userInputReader.readLine();
 
                 if (userInput.equals("HELP")) {
-                    System.out.println(initialMessage);
+                    System.out.println(initialMessage.toString());
                     continue;
                 }
 

@@ -41,7 +41,7 @@ public class Server {
                             "Operations :  ADD, SUB, MUL, DIV\n" +
                             "QUIT       :  Close the connection\n" +
                             "HELP       :  Show user manual\n" +
-                            "EOF\n");
+                            "\n");
                     out.flush();
 
                     String line;
