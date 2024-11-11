@@ -26,6 +26,7 @@ public class Client {
 
             String initialMessage = "";
             String line;
+            System.out.println(in.readLine());
             while ((line = in.readLine()) != null) {
                 if (line.contains("EOF")) {
                     break;

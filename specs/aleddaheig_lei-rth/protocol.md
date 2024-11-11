@@ -32,6 +32,8 @@
     - Error response after an incorrect operation message. Do not close connection.
 - `QUIT`
     - Can also be sent by the client to close the connection.
+- `HELP`
+  - Show user manual.
 - `BYE`
     - The server says bye.
 

@@ -40,7 +40,7 @@ public class Server {
                             "Usage      :  <OPERATION> <Number1> <Number2>\n" +
                             "Operations :  ADD, SUB, MUL, DIV\n" +
                             "QUIT       :  Close the connection\n" +
-                            "HELP       :  Show this message\n" +
+                            "HELP       :  Show user manual\n" +
                             "EOF\n");
                     out.flush();
 
@@ -58,11 +58,11 @@ public class Server {
                         }
 
                         String operator = line.split(" ")[0];
-                        double var1, var2;
+                        double lhs, rhs;
 
                         try {
-                            var1 = Double.parseDouble(line.split(" ")[1]);
-                            var2 = Double.parseDouble(line.split(" ")[2]);
+                            lhs = Double.parseDouble(line.split(" ")[1]);
+                            rhs = Double.parseDouble(line.split(" ")[2]);
                         } catch (NumberFormatException e) {
                             out.write("ERROR NON-NUMERIC ARGUMENTS\n");
                             out.flush();
@@ -71,21 +71,21 @@ public class Server {
 
                         switch (operator) {
                             case "ADD":
-                                out.write(formatResult(var1 + var2));
+                                out.write(formatResult(lhs + rhs));
                                 break;
                             case "SUB":
-                                out.write(formatResult(var1 - var2));
+                                out.write(formatResult(lhs - rhs));
                                 break;
                             case "MUL":
-                                out.write(formatResult(var1 * var2));
+                                out.write(formatResult(lhs * rhs));
                                 break;
                             case "DIV":
-                                if (var2 == 0) {
+                                if (rhs == 0) {
                                     out.write("ERROR DIVISION BY ZERO\n");
                                     break;
                                 }
 
-                                out.write(formatResult(var1 / var2));
+                                out.write(formatResult(lhs / rhs));
                                 break;
                             default:
                                 out.write("ERROR INVALID OPERATION\n");
